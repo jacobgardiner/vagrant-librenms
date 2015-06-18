@@ -44,3 +44,6 @@ $config['poller-wrapper']['alerter'] = FALSE;
 
 # Uncomment to submit callback stats via proxy
 #$config['callback_proxy'] = "hostname:port";
+
+# RHEL derivatives have a different path for fping
+$config['fping']            = "/usr/sbin/fping";
