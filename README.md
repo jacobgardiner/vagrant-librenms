@@ -19,6 +19,11 @@ $ cd vagrant-librenms
 $ vagrant up
 ```
 
+Crate a hostfile entry locally, so that librenms.local -> 192.168.56.111
+```
+192.168.56.111 librenms.local
+```
+
 ## Contributing
 
 ```
