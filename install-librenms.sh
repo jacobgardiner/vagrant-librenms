@@ -38,26 +38,29 @@ cd /opt
 git clone https://github.com/librenms/librenms.git librenms
 cd /opt/librenms
 
+# Setup user, add to nginx group
+useradd librenms -d /opt/librenms -M -r
+usermod -a -G librenms nginx
+
 # Setup librenms
 ln -sf /vagrant/setup/config.php config.php
 php build-base.php
 php adduser.php admin admin 10
 
 mkdir rrd logs
-chown nginx:nginx logs
+chown librenms:librenms logs
 
 chmod 775 rrd
 chown librenms:librenms rrd
 
 # setup cron
 cat > /etc/cron.d/librenms << EOF
-*/5 * * * * librenms /opt/librenms/poller-wrapper.py 12 >> /dev/null 2>&1
+33  */6   * * *   librenms    /opt/librenms/discovery.php -h all >> /dev/null 2>&1
+*/5  *    * * *   librenms    /opt/librenms/discovery.php -h new >> /dev/null 2>&1
+*/5  *    * * *   librenms    /opt/librenms/poller-wrapper.py 16 >> /dev/null 2>&1
+15   0    * * *   librenms    sh /opt/librenms/daily.sh >> /dev/null 2>&1
+*    *    * * *   librenms    /opt/librenms/alerts.php >> /dev/null 2>&1
 EOF
-
-
-# Setup user, add to nginx group
-useradd librenms -d /opt/librenms -M -r
-usermod -a -G librenms nginx
 
 # Setup nginx & php-fpm
 ln -sf /vagrant/setup/librenms-nginx.conf /etc/nginx/conf.d/librenms.conf
