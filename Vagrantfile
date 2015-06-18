@@ -13,8 +13,6 @@ Vagrant.configure("2") do |config|
     libre.vm.box = "sl6-base"
     libre.vm.box_url = "https://jgsyd.s3.amazonaws.com/vagrant/sl6-base.box"
     libre.vm.hostname = "librenms.local"
-    libre.vm.synced_folder "librenms", "/opt/librenms",
-      owner: "root", group: "root"
     libre.vm.network :private_network, ip: "192.168.56.111"
     libre.ssh.forward_agent = true
     libre.vm.provider :virtualbox do |vb|
